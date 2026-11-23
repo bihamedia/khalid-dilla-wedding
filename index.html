@@ -160,6 +160,11 @@ body:not(.locked) .music-label.ready{display:block}
 .acc small{letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);font-size:11px;font-weight:600}
 .acc .no{font-family:'Cormorant Garamond',serif;font-size:30px;letter-spacing:.05em;color:#fff;margin:4px 0 2px}
 .acc .an{font-size:13.5px;color:#cfe0c8}
+.acc+.acc{margin-top:14px}
+.acc .an{margin:0 0 10px}
+.acc small.paylabel{display:block}
+.acc .paylogo{height:26px;width:auto;display:block;margin:0 auto 4px;background:#fff;border-radius:6px;padding:4px 10px;box-sizing:content-box}
+.acc small.has-logo{font-size:0;letter-spacing:0;line-height:0}
 .acc .btn{border-color:var(--gold-soft);color:#f3ecd9}
 .acc .btn:hover{background:var(--gold);color:#12291a}
 
@@ -320,9 +325,16 @@ body:not(.locked) .music.ready{display:grid}
     <h2>Amplop Digital</h2>
     <p>Doa restu Anda adalah hadiah terindah bagi kami. Namun bila ingin memberikan tanda kasih, dapat melalui:</p>
     <div class="acc">
-      <small>DANA</small>
+      <small class="paylabel"><img class="paylogo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/250px-Logo_dana_blue.svg.png" alt="" loading="lazy" onload="this.parentNode.classList.add('has-logo')" onerror="this.remove()">DANA</small>
       <div class="no" id="no1">0859 7165 6669</div>
+      <div class="an">a.n. Muhammad Khalid Azhari</div>
       <button class="btn sm" type="button" data-copy="no1">Salin Nomor</button>
+    </div>
+    <div class="acc">
+      <small class="paylabel"><img class="paylogo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Bank_Syariah_Indonesia.svg/250px-Bank_Syariah_Indonesia.svg.png" alt="" loading="lazy" onload="this.parentNode.classList.add('has-logo')" onerror="this.remove()">Bank BSI</small>
+      <div class="no" id="no2">1122941680</div>
+      <div class="an">a.n. NurPadilah</div>
+      <button class="btn sm" type="button" data-copy="no2">Salin Nomor</button>
     </div>
   </div>
 </section>
