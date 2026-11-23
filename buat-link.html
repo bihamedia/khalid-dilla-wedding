@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buat Link Undangan Khalid &amp; Dilla</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: #faf6ee; color: #243024; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 20px 16px 40px; }
+  .card { background: #fffdf7; border: 1px solid #d8c690; border-radius: 14px; padding: 20px; box-shadow: 0 2px 10px rgba(13,59,46,.08); }
+  h1 { font-family: Georgia, "Times New Roman", serif; color: #0d3b2e; font-size: 24px; margin: 0 0 4px; text-align: center; }
+  .sub { text-align: center; color: #6b6b52; font-size: 14px; margin: 0 0 20px; }
+  label { display: block; font-weight: 700; color: #0d3b2e; margin: 0 0 6px; }
+  input[type="text"] { width: 100%; font-size: 17px; padding: 13px 12px; border: 2px solid #c9a227; border-radius: 10px; background: #fff; color: #243024; }
+  input[type="text"]:focus { outline: 3px solid #0d3b2e; outline-offset: 1px; }
+  .hint { font-size: 13px; color: #6b6b52; margin: 6px 0 0; }
+  .out { margin-top: 18px; border-top: 1px dashed #d8c690; padding-top: 16px; }
+  .out h2 { font-size: 15px; color: #0d3b2e; margin: 0 0 8px; }
+  .linkbox { word-break: break-all; background: #f3efe2; border: 1px solid #d8c690; border-radius: 8px; padding: 10px 12px; font-size: 14px; margin: 0 0 10px; min-height: 20px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  button { flex: 1 1 140px; min-height: 48px; font-size: 15px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; padding: 10px 12px; }
+  button:disabled { opacity: .45; cursor: default; }
+  .btn-copy { background: #0d3b2e; color: #fff; }
+  .btn-wa { background: #1faa55; color: #fff; }
+  .btn-open { background: #fff; color: #0d3b2e; border: 2px solid #0d3b2e !important; }
+  .ok { display: none; color: #0d3b2e; font-weight: 700; font-size: 14px; margin-top: 8px; }
+  .hist { margin-top: 24px; }
+  .hist h2 { font-size: 15px; color: #0d3b2e; margin: 0 0 8px; }
+  .hist-item { display: flex; align-items: center; gap: 8px; background: #fffdf7; border: 1px solid #e3d9b8; border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; }
+  .hist-name { flex: 1; font-size: 15px; }
+  .hist-item button { flex: 0 0 auto; min-height: 44px; padding: 8px 14px; font-size: 14px; }
+  .hist-empty { font-size: 14px; color: #6b6b52; }
+  .clear { background: none; color: #8a6d1a; text-decoration: underline; min-height: 44px; font-size: 14px; flex: none; padding: 8px 0; }
+  .note { font-size: 13px; color: #6b6b52; margin-top: 20px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Buat Link Undangan</h1>
+    <p class="sub">Khalid &amp; Dilla, Sabtu 5 Desember 2026</p>
+    <label for="nama">Nama tamu</label>
+    <input type="text" id="nama" placeholder="Contoh: Bapak Haji Abdullah" autocomplete="off">
+    <p class="hint">Tulis nama persis seperti yang mau tampil di undangan, beserta gelar kalau ada.</p>
+
+    <div class="out">
+      <h2>Link Bihamedia</h2>
+      <p class="linkbox" id="linkBiha">Isi nama tamu dulu.</p>
+      <div class="row">
+        <button class="btn-copy" id="salinBiha" disabled>Salin Link</button>
+        <button class="btn-wa" id="waBiha" disabled>Kirim via WhatsApp</button>
+        <button class="btn-open" id="bukaBiha" disabled>Buka Pratinjau</button>
+      </div>
+      <p class="ok" id="okBiha">Link tersalin.</p>
+    </div>
+
+    <div class="out">
+      <h2>Link AndhikaYusufh</h2>
+      <p class="linkbox" id="linkAndhika">Isi nama tamu dulu.</p>
+      <div class="row">
+        <button class="btn-copy" id="salinAndhika" disabled>Salin Link</button>
+        <button class="btn-wa" id="waAndhika" disabled>Kirim via WhatsApp</button>
+        <button class="btn-open" id="bukaAndhika" disabled>Buka Pratinjau</button>
+      </div>
+      <p class="ok" id="okAndhika">Link tersalin.</p>
+    </div>
+
+    <div class="hist">
+      <h2>Terakhir dibuat</h2>
+      <div id="histList"><p class="hist-empty">Belum ada nama.</p></div>
+      <button class="clear" id="hapusRiwayat" type="button">Hapus riwayat</button>
+    </div>
+  </div>
+  <p class="note">Nama tamu tampil otomatis di bagian Kepada Yth. pada undangan yang dibuka lewat link ini.</p>
+</div>
+<script>
+(function () {
+  var BASE_BIHA = "https://bihamedia.github.io/khalid-dilla-wedding/";
+  var BASE_ANDHIKA = "https://andhikayusufh.github.io/khalid-dilla/";
+  var V = "6";
+  var KEY = "khalid-dilla-link-history";
+  var input = document.getElementById("nama");
+
+  function buildLink(base, nama) {
+    return base + "?to=" + encodeURIComponent(nama) + "&v=" + V;
+  }
+  function currentLinks() {
+    var nama = input.value.trim();
+    if (!nama) return null;
+    return { biha: buildLink(BASE_BIHA, nama), andhika: buildLink(BASE_ANDHIKA, nama), nama: nama };
+  }
+  function refresh() {
+    var l = currentLinks();
+    var ids = [["linkBiha", "biha", "salinBiha", "waBiha", "bukaBiha", "okBiha"],
+               ["linkAndhika", "andhika", "salinAndhika", "waAndhika", "bukaAndhika", "okAndhika"]];
+    ids.forEach(function (r) {
+      var box = document.getElementById(r[0]);
+      var dis = !l;
+      box.textContent = l ? l[r[1]] : "Isi nama tamu dulu.";
+      ["salin", "wa", "buka"].forEach(function (k, i) {
+        document.getElementById(r[2 + i]).disabled = dis;
+      });
+      document.getElementById(r[5]).style.display = "none";
+    });
+  }
+  function copyText(text, okId) {
+    function done() {
+      var ok = document.getElementById(okId);
+      ok.style.display = "block";
+      setTimeout(function () { ok.style.display = "none"; }, 2000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+    } else { fallback(); }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta); done();
+    }
+  }
+  function saveHistory(nama) {
+    try {
+      var list = JSON.parse(localStorage.getItem(KEY) || "[]");
+      list = list.filter(function (n) { return n !== nama; });
+      list.unshift(nama);
+      localStorage.setItem(KEY, JSON.stringify(list.slice(0, 30)));
+    } catch (e) {}
+    renderHistory();
+  }
+  function renderHistory() {
+    var box = document.getElementById("histList");
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
+    if (!list.length) { box.innerHTML = '<p class="hist-empty">Belum ada nama.</p>'; return; }
+    box.innerHTML = "";
+    list.forEach(function (nama) {
+      var row = document.createElement("div");
+      row.className = "hist-item";
+      var span = document.createElement("span");
+      span.className = "hist-name";
+      span.textContent = nama;
+      var b = document.createElement("button");
+      b.className = "btn-copy"; b.type = "button"; b.textContent = "Salin";
+      b.addEventListener("click", function () {
+        input.value = nama; refresh();
+        copyText(buildLink(BASE_BIHA, nama), "okBiha");
+      });
+      span.addEventListener("click", function () { input.value = nama; refresh(); input.focus(); });
+      row.appendChild(span); row.appendChild(b);
+      box.appendChild(row);
+    });
+  }
+  function act(kind, which) {
+    var l = currentLinks();
+    if (!l) return;
+    var url = which === "biha" ? l.biha : l.andhika;
+    var okId = which === "biha" ? "okBiha" : "okAndhika";
+    saveHistory(l.nama);
+    if (kind === "copy") copyText(url, okId);
+    if (kind === "wa") window.open("https://wa.me/?text=" + encodeURIComponent("Undangan Pernikahan Khalid & Dilla: " + url), "_blank");
+    if (kind === "open") window.open(url, "_blank");
+  }
+  input.addEventListener("input", refresh);
+  document.getElementById("salinBiha").addEventListener("click", function () { act("copy", "biha"); });
+  document.getElementById("waBiha").addEventListener("click", function () { act("wa", "biha"); });
+  document.getElementById("bukaBiha").addEventListener("click", function () { act("open", "biha"); });
+  document.getElementById("salinAndhika").addEventListener("click", function () { act("copy", "andhika"); });
+  document.getElementById("waAndhika").addEventListener("click", function () { act("wa", "andhika"); });
+  document.getElementById("bukaAndhika").addEventListener("click", function () { act("open", "andhika"); });
+  document.getElementById("hapusRiwayat").addEventListener("click", function () {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    renderHistory();
+  });
+  refresh();
+  renderHistory();
+  input.focus();
+})();
+</script>
+</body>
+</html>
