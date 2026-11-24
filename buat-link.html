@@ -85,6 +85,16 @@
   function buildLink(base, nama) {
     return base + "?to=" + encodeURIComponent(nama) + "&v=" + V;
   }
+  function buildMessage(url) {
+    return "Assalamu'alaikum warahmatullahi wabarakatuh.\n\n"
+      + "Dengan penuh syukur, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di pernikahan kami:\n\n"
+      + "Khalid & Dilla\n"
+      + "Sabtu, 5 Desember 2026\n"
+      + "Akad 09.00 WITA | Resepsi 11.00-13.00 WITA\n"
+      + "Rumah kediaman mempelai pria, Jl. Sahabat Rt 1, Dusun Presak, Desa Meninting, Kec. Batu Layar, Lombok Barat\n\n"
+      + "Undangan digitalnya bisa dibuka di sini:\n" + url + "\n\n"
+      + "Mohon doa restu dan kehadirannya. Terima kasih.";
+  }
   function currentLinks() {
     var nama = input.value.trim();
     if (!nama) return null;
@@ -159,7 +169,7 @@
     var okId = which === "biha" ? "okBiha" : "okAndhika";
     saveHistory(l.nama);
     if (kind === "copy") copyText(url, okId);
-    if (kind === "wa") window.open("https://wa.me/?text=" + encodeURIComponent("Undangan Pernikahan Khalid & Dilla: " + url), "_blank");
+    if (kind === "wa") window.open("https://wa.me/?text=" + encodeURIComponent(buildMessage(url)), "_blank");
     if (kind === "open") window.open(url, "_blank");
   }
   input.addEventListener("input", refresh);
